@@ -27,17 +27,7 @@ app.use(morgan("dev"));
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/category", categoryRoutes)
 app.use("/api/v1/product", productRoutes)
-app.use("/api/v1/email", emailRoutes); // Use the new email route
-//nodemailer setup
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USERNAME,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
-
-
+app.use("/email", emailRoutes); 
 //PORT
 const Port = process.env.PORT || 8000;
 
