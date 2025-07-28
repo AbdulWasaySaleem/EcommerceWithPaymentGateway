@@ -3,20 +3,17 @@ import userModel from "../Model/userModel.js";
 
 //protecting Route token base
 export const requireSignIn = async (req, res, next) => {
-  try {
-    //decrpty
-    const decode = JWT.verify(
-      req.headers.authorization,
-      process.env.JWT_SECRET
-    );
-    req.user = decode; //excrpt
+ try {
+    const token = req.headers.authorization?.replace("Bearer ", "") || req.headers.authorization;
+    const decode = JWT.verify(token, process.env.JWT_SECRET);
+    req.user = await userModel.findById(decode._id).select("-password");
     next();
   } catch (error) {
     console.log(error);
-    return res.status(404).send({
+    res.status(401).send({
       success: false,
-      message: "requireSignINMiddleWare Error"
-    })
+      message: "Unauthorized",
+    });
   }
 };
 

@@ -55,6 +55,6 @@ router.get("/product-and-similar/:slug", getSingleProductWithSimilar);
 router.get("/braintree/token", braintreeController);
 
 //payment route
-router.post("/braintree/payment", requireSignIn, braintreePaymentController);
+router.post("/braintree/payment",requireSignIn ,braintreePaymentController);
 
 export default router;
