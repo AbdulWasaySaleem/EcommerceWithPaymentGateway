@@ -1,12 +1,15 @@
 // controllers/emailController.js
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // Nodemailer setup
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "07.abdulwasayy@gmail.com", // Your Gmail email address
-    pass: "", // Your Gmail password
+    user: process.env.EMAIL_USERNAME,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -16,8 +19,8 @@ export const sendEmail = async (req, res) => {
     const { name, email, message } = req.body;
 
     const mailOptions = {
-      from: "07.abdulwasayy@gmail.com",
-      to: "", // Your email address
+      from: process.env.EMAIL_USERNAME,
+      to: process.env.EMAIL_FOR,
       subject: "New Contact Form Submission",
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
     };
@@ -31,4 +34,3 @@ export const sendEmail = async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 };
-

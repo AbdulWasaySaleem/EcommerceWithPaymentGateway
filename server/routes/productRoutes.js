@@ -6,15 +6,14 @@ import {
   createProductController,
   deleteProductController,
   getProductController,
-  getSingleProduct,
+  getSingleProductWithSimilar,
   productCountController,
   productFilterController,
   productListController,
-  productPhotoController,
-  similarProductController,
   updateProductController,
 } from "../controllers/productController.js";
 import formidable from "express-formidable";
+import upload from "../middlewares/uploadFile.js";
 const router = express.Router();
 
 //create product || POST
@@ -22,18 +21,12 @@ router.post(
   "/createproduct",
   requireSignIn,
   isAdmin,
-  formidable(),
+  upload.single("photo"),
   createProductController
 );
 
 //Get product || get
 router.get("/getproduct", getProductController);
-
-//Get Single product || get
-router.get("/getproduct/:slug", getSingleProduct);
-
-//Get Photo || get
-router.get("/productphoto/:pid", productPhotoController);
 
 //Router.Delete || DELETE
 router.delete("/delete/:pid", deleteProductController);
@@ -56,8 +49,7 @@ router.get("/productcount", productCountController);
 // product per page  || get
 router.get("/productlist/:page", productListController);
 
-//similar products || get
-router.get("/similarproduct/:pid/:cid", similarProductController);
+router.get("/product-and-similar/:slug", getSingleProductWithSimilar);
 
 //Payrment route || token
 router.get("/braintree/token", braintreeController);

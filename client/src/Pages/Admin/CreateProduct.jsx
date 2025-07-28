@@ -33,6 +33,8 @@ const CreateProduct = () => {
     }
   };
 
+  console.log(categories);
+
   // creating product || btn
   const handleClick = async (e) => {
     e.preventDefault();

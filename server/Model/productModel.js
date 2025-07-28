@@ -28,8 +28,8 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     photo: {
-      data: Buffer, // store large image data ke type buffer
-      contentType: String, //may be link maybe document
+      url: String,
+      public_id: String,
     },
     shipping: {
       type: Boolean, // order status show
