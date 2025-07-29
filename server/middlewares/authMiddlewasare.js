@@ -1,40 +1,43 @@
 import JWT from "jsonwebtoken";
 import userModel from "../Model/userModel.js";
 
-//protecting Route token base
+// Protecting Route (Token Based)
 export const requireSignIn = async (req, res, next) => {
- try {
-    const token = req.headers.authorization?.replace("Bearer ", "") || req.headers.authorization;
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, message: "No token provided" });
+    }
+
+    const token = authHeader.split(" ")[1];
     const decode = JWT.verify(token, process.env.JWT_SECRET);
     req.user = await userModel.findById(decode._id).select("-password");
     next();
   } catch (error) {
-    console.log(error);
-    res.status(401).send({
+    console.log("Auth middleware error:", error);
+    res.status(401).json({
       success: false,
       message: "Unauthorized",
     });
   }
 };
 
-//Admin Access
+// Admin Access
 export const isAdmin = async (req, res, next) => {
   try {
     const user = await userModel.findById(req.user._id);
     if (user.role !== 1) {
-      return res.status(401).send({
+      return res.status(401).json({
         success: false,
-        message: "UnAuthorized Access",
+        message: "Unauthorized Access",
       });
-    } else {
-      next();
     }
+    next();
   } catch (error) {
     console.log(error);
-    res.status(401).send({
+    res.status(401).json({
       success: false,
-      error,
-      message: "middleware error in isAdmin",
+      message: "Middleware error in isAdmin",
     });
   }
 };

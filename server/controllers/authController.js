@@ -139,7 +139,7 @@ export const forgotController = async (req, res) => {
 //order
 export const getOrdersController = async(req,res)=>{
   try {
-    const orders = await orderModel.find({buyer: req.user._id}).populate("buyer", "name").populate("products", "-photo")
+    const orders = await orderModel.find({buyer: req.user._id}).populate("buyer", "name").populate("products")
     res.json(orders)
   } catch (error) {
     console.log(error);
