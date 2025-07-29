@@ -1,40 +1,47 @@
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+// src/Components/Carousel.jsx
 
-const Carousil = () => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    arrows: false,
-  };
+import useEmblaCarousel from 'embla-carousel-react';
+import { useEffect } from 'react';
+import img1 from '../src/assets/carousilImages/carousil1.webp';
+import img2 from '../src/assets/carousilImages/carousil2.webp';
+import img3 from '../src/assets/carousilImages/carousil3.webp';
+
+const images = [img1, img2, img3];
+
+const Carousel = () => {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const interval = setInterval(() => {
+      emblaApi.scrollNext();
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [emblaApi]);
 
   return (
     <div className="w-full max-w-7xl mx-auto rounded-xl overflow-hidden shadow-md mt-4">
-      <div className="h-[260px] sm:h-[300px] md:h-[360px]">
-        <Slider {...settings}>
-          {[
-            "https://icms-image.slatic.net/images/ims-web/87a71d56-52a7-4961-8318-4e930af6e78e.png",
-            "https://icms-image.slatic.net/images/ims-web/4aa8ed81-6c4f-4e4c-8beb-e440a773ffb3.jpg",
-            "https://icms-image.slatic.net/images/ims-web/b5def08d-e14d-4185-aa67-f72e99c995e9.jpg",
-          ].map((url, index) => (
-            <div key={index}>
+      <div className="overflow-hidden h-[260px] sm:h-[300px] md:h-[360px]" ref={emblaRef}>
+        <div className="flex">
+          {images.map((img, index) => (
+            <div
+              key={index}
+              className="flex-[0_0_100%] min-w-0 h-full flex items-center justify-center"
+            >
               <img
-                src={url}
+                src={img}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
           ))}
-        </Slider>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Carousil;
+export default Carousel;

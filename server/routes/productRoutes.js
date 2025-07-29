@@ -6,6 +6,7 @@ import {
   createProductController,
   deleteProductController,
   getProductController,
+  getSingleProduct,
   getSingleProductWithSimilar,
   productCountController,
   productFilterController,
@@ -36,7 +37,7 @@ router.put(
   "/editproduct/:pid",
   requireSignIn,
   isAdmin,
-  formidable(),
+  upload.single("photo"),
   updateProductController
 );
 
@@ -50,6 +51,9 @@ router.get("/productcount", productCountController);
 router.get("/productlist/:page", productListController);
 
 router.get("/product-and-similar/:slug", getSingleProductWithSimilar);
+
+
+router.get("/getproduct/:slug", getSingleProduct)
 
 //Payrment route || token
 router.get("/braintree/token", braintreeController);

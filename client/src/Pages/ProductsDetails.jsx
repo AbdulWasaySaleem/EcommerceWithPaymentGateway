@@ -6,17 +6,16 @@ import RelatedProducts from "../Components/Product/RelatedProducts";
 import { useCart } from "../context/cart";
 import axiosInstance from "../utils/axiosInstance";
 import Layout from "../Components/Layout";
-import { ArrowLeft } from "lucide-react";
 import Breadcrumbs from "../Components/Breadcrumbs";
+import LoadingSpinner from "../Components/common/LoadingSpinner";
 
 const ProductDetails = () => {
   const { slug } = useParams();
-  const [cart, setCart] = useCart();
+  const { cart, setCart } = useCart();
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate();
 
   const getProduct = async () => {
     try {
@@ -41,16 +40,14 @@ const ProductDetails = () => {
   if (isLoading) {
     return (
       <Layout>
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        </div>
+        <LoadingSpinner loadingText="Loading product details..." />
       </Layout>
     );
   }
 
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto  sm:px-6 lg:px-4">
+      <div className="max-w-7xl mx-auto sm:px-6 lg:px-4">
         {/* Breadcrumbs */}
         <Breadcrumbs
           items={[

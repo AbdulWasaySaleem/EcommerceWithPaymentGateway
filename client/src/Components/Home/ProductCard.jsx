@@ -2,17 +2,30 @@ import { Edit, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useCart } from "../../context/cart";
 
-const ProductCard = ({ product, cart, setCart, isAdmin }) => {
+const ProductCard = ({ product, isAdmin }) => {
   const navigate = useNavigate();
+  const { cart, setCart } = useCart(); // Use the cart context
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    const updatedCart = [...cart, product];
-    setCart(updatedCart);
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    const existingCart = [...cart];
+    const index = existingCart.findIndex((item) => item._id === product._id);
+
+    if (index !== -1) {
+      // Product already in cart: increase quantity
+      existingCart[index].cartQuantity =
+        (existingCart[index].cartQuantity || 1) + 1;
+    } else {
+      // New product: add with cartQuantity = 1
+      existingCart.push({ ...product, cartQuantity: 1 });
+    }
+
+    setCart(existingCart); // Update context state
+    localStorage.setItem("cart", JSON.stringify(existingCart)); // Also update localStorage
     toast.success("Added to cart");
   };
 

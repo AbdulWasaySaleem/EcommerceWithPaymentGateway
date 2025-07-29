@@ -2,6 +2,7 @@ import userModel from "../Model/userModel.js";
 import bcrypt from "bcrypt";
 import JWT from "jsonwebtoken";
 import orderModel from "../Model/orderModel.js";
+import productModel from "../Model/productModel.js";
 
 export const registerController = async (req, res) => {
   try {
@@ -93,7 +94,7 @@ export const loginController = async (req, res) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
-        role: user.role
+        role: user.role,
       },
       token,
     });
@@ -122,11 +123,11 @@ export const forgotController = async (req, res) => {
     }
     //hashed
     const hashPass = await bcrypt.hash(newPassword, 10);
-    await userModel.findByIdAndUpdate(user._id, {password:hashPass })
+    await userModel.findByIdAndUpdate(user._id, { password: hashPass });
     res.status(200).send({
       success: true,
       message: "Password updated successfully",
-    })
+    });
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -137,10 +138,19 @@ export const forgotController = async (req, res) => {
   }
 };
 //order
-export const getOrdersController = async(req,res)=>{
+export const getOrdersController = async (req, res) => {
   try {
-    const orders = await orderModel.find({buyer: req.user._id}).populate("buyer", "name").populate("products")
-    res.json(orders)
+    const orders = await orderModel
+      .find({ buyer: req.user._id })
+      .populate("buyer", "name")
+      .populate({
+        path: "products",
+        populate: {
+          path: "category",
+          select: "name", // only get category name
+        },
+      });
+    res.json(orders);
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -149,12 +159,15 @@ export const getOrdersController = async(req,res)=>{
       error,
     });
   }
-}
+};
 //All order
-export const getAllOrdersController = async(req,res)=>{
+export const getAllOrdersController = async (req, res) => {
   try {
-    const orders = await orderModel.find({}).populate("buyer", "name").populate("products")
-    res.json(orders)
+    const orders = await orderModel
+      .find({})
+      .populate("buyer", "name")
+      .populate("products");
+    res.json(orders);
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -163,14 +176,18 @@ export const getAllOrdersController = async(req,res)=>{
       error,
     });
   }
-}
+};
 
-export const orderStatusController = async(req,res)=>{
+export const orderStatusController = async (req, res) => {
   try {
-    const {orderId} = req.params
-    const {status} = req.body
-    const orders = await orderModel.findByIdAndUpdate(orderId, {status}, {new:true})
-    res.json(orders)
+    const { orderId } = req.params;
+    const { status } = req.body;
+    const orders = await orderModel.findByIdAndUpdate(
+      orderId,
+      { status },
+      { new: true }
+    );
+    res.json(orders);
   } catch (error) {
     console.log(error);
     res.status(500).send({
@@ -179,7 +196,7 @@ export const orderStatusController = async(req,res)=>{
       error,
     });
   }
-}
+};
 
 //test
 export const testController = (req, res) => {
@@ -190,16 +207,12 @@ export const getSummaryController = async (req, res) => {
   try {
     const users = await userModel.countDocuments();
     const orders = await orderModel.countDocuments();
-    const products = await orderModel.aggregate([
-      { $unwind: "$products" },
-      { $group: { _id: null, total: { $sum: 1 } } }
-    ]);
-    const totalProducts = products.length > 0 ? products[0].total : 0;
+    const products = await productModel.countDocuments();
 
     res.json({
       users,
       orders,
-      products: totalProducts
+      products,
     });
   } catch (error) {
     console.log(error);
@@ -209,4 +222,4 @@ export const getSummaryController = async (req, res) => {
       error,
     });
   }
-}
+};

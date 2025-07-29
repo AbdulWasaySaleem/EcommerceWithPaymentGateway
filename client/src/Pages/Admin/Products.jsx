@@ -32,6 +32,8 @@ const Products = () => {
   const mockCart = [];
   const mockSetCart = () => {};
 
+  console.log("products", products);
+
   return (
     <Layout>
       <div className="min-h-screen bg-gray-50/50">

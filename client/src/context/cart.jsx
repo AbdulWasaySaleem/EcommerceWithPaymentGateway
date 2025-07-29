@@ -1,19 +1,28 @@
 import { useState, useContext, createContext, useEffect } from "react";
 
-//Step 1: CReating context || PRovider(Value to pass directly) && consumer(Consumes and uses shared data)
 const CartContext = createContext();
 
-//children is all sub components
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const [isCartReady, setIsCartReady] = useState(false);
+
   useEffect(() => {
-    let existingCart = localStorage.getItem("cart");
-    if (existingCart) setCart(JSON.parse(existingCart));
-  }, []);
+  let existingCart = localStorage.getItem("cart");
+  if (existingCart) {
+    const parsed = JSON.parse(existingCart);
+    const normalized = parsed.map((item) => ({
+      ...item,
+      cartQuantity: typeof item.cartQuantity === "number" ? item.cartQuantity : 1,
+    }));
+    setCart(normalized);
+    localStorage.setItem("cart", JSON.stringify(normalized));
+  }
+  setIsCartReady(true);
+}, []);
+
 
   return (
-    //Return the context provider with the cart value provided to its descendants//childres
-    <CartContext.Provider value={[cart, setCart]}>
+    <CartContext.Provider value={{ cart, setCart, isCartReady }}>
       {children}
     </CartContext.Provider>
   );

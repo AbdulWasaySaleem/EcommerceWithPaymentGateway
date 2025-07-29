@@ -82,27 +82,6 @@ const CartItem = ({ product, onRemove, onUpdateQty, isUpdating }) => {
                 </p>
               )}
 
-              {/* Product Rating */}
-              {product.rating && (
-                <div className="flex items-center gap-1 mb-2">
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-3 h-3 ${
-                          i < Math.floor(product.rating)
-                            ? "text-yellow-400 fill-current"
-                            : "text-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-xs text-gray-600">
-                    ({product.rating})
-                  </span>
-                </div>
-              )}
-
               {/* Product Category/Brand */}
               {product.category && (
                 <p className="text-xs text-blue-600 font-medium mb-3">
@@ -183,7 +162,7 @@ const CartItem = ({ product, onRemove, onUpdateQty, isUpdating }) => {
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 In Stock
               </span>
-              <span>Free shipping on orders over Rs. 1000</span>
+              <span>Free shipping on orders over $1000</span>
               <span>30-day return policy</span>
             </div>
           </div>

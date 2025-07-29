@@ -77,8 +77,6 @@ export const getProductController = async (req, res) => {
       .limit(12)
       .sort({ createdAt: -1 });
 
-    console.log("products", products);
-
     res.status(200).send({
       success: true,
       countTotal: products.length,
@@ -130,45 +128,56 @@ export const deleteProductController = async (req, res) => {
 //Update
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, quantity, shipping } = req.fields;
-    const { photo } = req.files;
-    //validation
+    const { name, description, price, quantity, shipping } = req.body;
+    const photo = req.file;
+
+    // Validation
     switch (true) {
       case !name:
-        return res.send({ message: "Name is required" });
+        return res.status(400).send({ message: "Name is required" });
       case !description:
-        return res.send({ message: "Description is required" });
+        return res.status(400).send({ message: "Description is required" });
       case !price:
-        return res.send({ message: "Price is required" });
+        return res.status(400).send({ message: "Price is required" });
       case !quantity:
-        return res.send({ message: "Quantity is required" });
-      case photo && photo > 1000000:
-        return res.send({
-          message: "Photo is required & should be less than 1MB",
-        });
+        return res.status(400).send({ message: "Quantity is required" });
+      case photo && photo.size > 1000000:
+        return res
+          .status(400)
+          .send({ message: "Photo should be less than 1MB" });
     }
 
-    //making copy + updating
+    // Generate slug
+    const slug = req.body.slug || slugify(name);
 
-    const slug = req.fields.slug || slugify(name);
-    //making copy
-    const products = await productModel.findByIdAndUpdate(
+    // Update product
+    const product = await productModel.findByIdAndUpdate(
       req.params.pid,
-      { ...req.fields, slug },
+      {
+        name,
+        description,
+        price,
+        quantity,
+        shipping,
+        slug,
+      },
       { new: true }
     );
+
     if (photo) {
-      products.photo.data = fs.readFileSync(photo.path);
-      products.photo.contentType = photo.type;
+      product.photo.data = fs.readFileSync(photo.path);
+      product.photo.contentType = photo.mimetype;
     }
-    await products.save();
-    res.status(201).send({
+
+    await product.save();
+
+    res.status(200).send({
       success: true,
       message: "Product Updated Successfully!",
-      products,
+      product,
     });
   } catch (error) {
-    console.log(error);
+    console.error("Error updating product:", error);
     res.status(500).send({
       success: false,
       message: "Error with Updating Product",
@@ -222,11 +231,26 @@ export const productListController = async (req, res) => {
     const perPage = 12;
     const page = req.params.page ? req.params.page : 1;
 
-    const products = await productModel
+    const productsData = await productModel
       .find({})
       .skip((page - 1) * perPage)
       .limit(perPage)
-      .sort({ createdAt: -1 });
+      .sort({ createdAt: -1 })
+      .populate("category", "name");
+
+    const products = productsData.map((product) => {
+      const url = product.photo.url.replace(
+        "/upload/",
+        "/upload/f_auto,q_auto/"
+      );
+      return {
+        ...product.toObject(), // ✅ fix is here
+        photo: {
+          ...product.photo,
+          url,
+        },
+      };
+    });
 
     res.status(200).send({
       success: true,
@@ -242,12 +266,13 @@ export const productListController = async (req, res) => {
   }
 };
 
+
 export const getSingleProductWithSimilar = async (req, res) => {
   try {
     // Step 1: Get the main product
     const product = await productModel
       .findOne({ slug: req.params.slug })
-      .populate("category");
+      .populate("category", "name");
 
     if (!product) {
       return res.status(404).send({
@@ -278,6 +303,28 @@ export const getSingleProductWithSimilar = async (req, res) => {
     res.status(500).send({
       success: false,
       message: "Error fetching product and similar products",
+      error,
+    });
+  }
+};
+
+export const getSingleProduct = async (req, res) => {
+  //update product
+  const { slug } = req.params;
+  try {
+    const product = await productModel
+      .findOne({ slug })
+      .populate("category", "name");
+    res.status(200).send({
+      success: true,
+      message: "Single Product Fetched",
+      product,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      success: false,
+      message: "Error fetching single product",
       error,
     });
   }

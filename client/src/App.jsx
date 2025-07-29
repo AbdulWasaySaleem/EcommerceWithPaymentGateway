@@ -1,60 +1,70 @@
 import { Routes, Route } from "react-router-dom";
-import HomePage from "./Pages/HomePage";
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import Policy from "./pages/Policy";
-import PageNotFound from "./pages/PageNotFound";
-import Register from "./Pages/Auth/Register";
-import Login from "./Pages/Auth/Login";
-import Dashboard from "./Pages/user/Dashboard";
-import Private from "./Components/Routes/Private";
-import ForgotPassword from "./Pages/Auth/ForgotPassword";
+import { Suspense, lazy } from "react";
+import ScrollToTop from "./Components/common/ScrollToTop";
+
+// Lazy loaded pages
+const HomePage = lazy(() => import("./Pages/HomePage"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Policy = lazy(() => import("./pages/Policy"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound"));
+const Register = lazy(() => import("./Pages/Auth/Register"));
+const Login = lazy(() => import("./Pages/Auth/Login"));
+const ForgotPassword = lazy(() => import("./Pages/Auth/ForgotPassword"));
+const Dashboard = lazy(() => import("./Pages/user/Dashboard"));
+const Orders = lazy(() => import("./Pages/user/Orders"));
+const Profiles = lazy(() => import("./Pages/user/Profiles"));
+const AdminDashboard = lazy(() => import("./Pages/Admin/AdminDashboard"));
+const CreateCategory = lazy(() => import("./Pages/Admin/CreateCategory"));
+const CreateProduct = lazy(() => import("./Pages/Admin/CreateProduct"));
+const AdminProfile = lazy(() => import("./Pages/Admin/AdminProfile"));
+const Products = lazy(() => import("./Pages/Admin/Products"));
+const UpdateProduct = lazy(() => import("./Pages/Admin/UpdateProduct"));
+const Cartpage = lazy(() => import("./Pages/Cartpage"));
+const AdminOrders = lazy(() => import("./Pages/Admin/AdminOrders"));
+const ProductDetails = lazy(() => import("./Pages/ProductsDetails"));
+
+// Auth routes
 import AdminRoute from "./Components/Routes/AdminRoute";
-import AdminDashboard from "./Pages/Admin/AdminDashboard";
-import CreateCategory from "./Pages/Admin/CreateCategory";
-import CreateProduct from "./Pages/Admin/CreateProduct";
-import AdminProfile from "./Pages/Admin/AdminProfile";
-import Orders from "./Pages/user/Orders";
-import Profiles from "./Pages/user/Profiles";
-import Products from "./Pages/Admin/Products";
-import UpdateProduct from "./Pages/Admin/UpdateProduct";
-import Cartpage from "./Pages/Cartpage";
-import AdminOrders from "./Pages/Admin/AdminOrders";
-import ProductDetails from "./Pages/ProductsDetails";
-import ScrollToTop from "./Components/ScrollToTop";
+import Private from "./Components/Routes/Private";
+import LoadingSpinner from "./Components/common/LoadingSpinner";
 
 function App() {
   return (
     <>
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="product/:slug" element={<ProductDetails />} />
+      <Suspense fallback={<LoadingSpinner />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="product/:slug" element={<ProductDetails />} />
 
-        <Route path="/dashboard" element={<Private />}>
-          <Route path="user" element={<Dashboard />} />
-          <Route path="user/orders" element={<Orders />} />
-          <Route path="user/profiles" element={<Profiles />} />
-        </Route>
-        <Route path="/dashboard" element={<AdminRoute />}>
-          <Route path="admin" element={<AdminDashboard />} />
-          <Route path="admin/create-category" element={<CreateCategory />} />
-          <Route path="admin/create-product" element={<CreateProduct />} />
-          <Route path="admin/products/:slug" element={<UpdateProduct />} />
-          <Route path="admin/profile" element={<AdminProfile />} />
-          <Route path="admin/products" element={<Products />} />
-          <Route path="admin/orders" element={<AdminOrders />} />
-        </Route>
+          {/* Protected Routes */}
+          <Route path="/dashboard" element={<Private />}>
+            <Route path="user" element={<Dashboard />} />
+            <Route path="user/orders" element={<Orders />} />
+            <Route path="user/profiles" element={<Profiles />} />
+          </Route>
+          <Route path="/dashboard" element={<AdminRoute />}>
+            <Route path="admin" element={<AdminDashboard />} />
+            <Route path="admin/create-category" element={<CreateCategory />} />
+            <Route path="admin/create-product" element={<CreateProduct />} />
+            <Route path="admin/products/:slug" element={<UpdateProduct />} />
+            <Route path="admin/profile" element={<AdminProfile />} />
+            <Route path="admin/products" element={<Products />} />
+            <Route path="admin/orders" element={<AdminOrders />} />
+          </Route>
 
-        <Route path="/about" element={<About />} />
-        <Route path="/cart" element={<Cartpage />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/policy" element={<Policy />} />
-        <Route path="*" element={<PageNotFound />} />
-      </Routes>
+          {/* Public Routes */}
+          <Route path="/about" element={<About />} />
+          <Route path="/cart" element={<Cartpage />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/policy" element={<Policy />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 }

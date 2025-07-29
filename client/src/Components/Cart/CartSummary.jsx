@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DropIn from "braintree-web-drop-in-react";
 import { toast } from "react-hot-toast";
 import axiosInstance from "../../utils/axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
 import { useCart } from "../../context/cart";
 import {
@@ -10,27 +10,32 @@ import {
   Truck,
   CreditCard,
   Lock,
-  Tag,
   Calculator,
   CheckCircle,
   AlertCircle,
 } from "lucide-react";
+import { formatCurrency } from "./formatecurrency";
 
-const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
+const CartSummary = ({ cart, subtotalAmount, isUpdating }) => {
   const [auth] = useAuth();
-  const [_, setCart] = useCart();
+  const { setCart } = useCart();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState(null);
   const [loading, setLoading] = useState(false);
   const [tokenLoading, setTokenLoading] = useState(false);
-  const [promoCode, setPromoCode] = useState("");
-  const [promoApplied, setPromoApplied] = useState(false);
-  const [discount, setDiscount] = useState(0);
   const navigate = useNavigate();
 
-  const shippingCost = cart.length > 0 ? 20 : 0;
-  const tax = subtotalAmount * 0.05; // 5% tax
-  const finalAmount = subtotalAmount + shippingCost + tax;
+  const shippingCost = useMemo(() => (cart.length > 0 ? 20 : 0), [cart.length]);
+  const tax = useMemo(() => subtotalAmount * 0.05, [subtotalAmount]);
+  const finalAmount = useMemo(
+    () => subtotalAmount + shippingCost + tax,
+    [subtotalAmount, shippingCost, tax]
+  );
+
+  const itemsCount = useMemo(
+    () => cart.reduce((acc, item) => acc + (item.cartQuantity || 1), 0),
+    [cart]
+  );
 
   useEffect(() => {
     if (!auth?.token) return;
@@ -90,14 +95,6 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
     }
   };
 
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-    }).format(amount);
-  };
-
   if (!clientToken && tokenLoading) {
     return (
       <div className="bg-white rounded-xl shadow-lg border p-6">
@@ -114,7 +111,7 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
     );
   }
 
-  if (!clientToken || cart.length === 0) return null;
+  if (cart.length === 0) return null;
 
   return (
     <div className="bg-white rounded-xl shadow-lg border overflow-hidden">
@@ -130,14 +127,7 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
         {/* Items Summary */}
         <div className="space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">
-              Items (
-              {cart.reduce(
-                (total, item) => total + (item.cartQuantity || 1),
-                0
-              )}
-              )
-            </span>
+            <span className="text-gray-600">Items ({itemsCount})</span>
             <span className="font-medium">
               {formatCurrency(subtotalAmount)}
             </span>
@@ -173,33 +163,43 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
             <CreditCard className="w-4 h-4" />
             Payment Method
           </h3>
-          <p className="mt-4 text-sm text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-3 flex items-center gap-2">
-            ⚠️ This is just for demo purposes.{" "}
-            <strong>Please do not enter your real payment details.</strong>
-          </p>
 
-          <div
-            className={`transition-all duration-300 ${
-              isUpdating ? "opacity-50 pointer-events-none" : ""
-            }`}
-          >
-            <DropIn
-              options={{
-                authorization: clientToken,
-                card: {
-                  overrides: {
-                    styles: {
-                      input: {
-                        "font-size": "14px",
-                        color: "#333",
+          {!auth?.token ? (
+            <p className="text-sm text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-3 flex items-center gap-2">
+              ⚠️ Please{" "}
+              <Link to="/login" className="underline font-semibold">
+                log in
+              </Link>{" "}
+              to proceed with checkout.
+            </p>
+          ) : tokenLoading ? (
+            <p className="text-gray-500">Loading payment options...</p>
+          ) : clientToken ? (
+            <div
+              className={`transition-all duration-300 ${
+                isUpdating ? "opacity-50 pointer-events-none" : ""
+              }`}
+            >
+              <DropIn
+                options={{
+                  authorization: clientToken,
+                  card: {
+                    overrides: {
+                      styles: {
+                        input: {
+                          "font-size": "14px",
+                          color: "#333",
+                        },
                       },
                     },
                   },
-                },
-              }}
-              onInstance={setInstance}
-            />
-          </div>
+                }}
+                onInstance={setInstance}
+              />
+            </div>
+          ) : (
+            <p className="text-red-500">Unable to load payment system.</p>
+          )}
         </div>
 
         {/* Security Features */}
@@ -217,9 +217,9 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
         {/* Checkout Button */}
         <button
           onClick={handlePayment}
-          disabled={loading || isUpdating || !instance}
+          disabled={loading || isUpdating || !instance || !auth?.token}
           className={`w-full py-4 rounded-lg font-medium text-white transition-all duration-300 ${
-            loading || isUpdating || !instance
+            loading || isUpdating || !instance || !auth?.token
               ? "bg-gray-400 cursor-not-allowed"
               : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           }`}
@@ -229,10 +229,15 @@ const CartSummary = ({ cart, totalAmount, subtotalAmount, isUpdating }) => {
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               Processing Payment...
             </div>
-          ) : (
+          ) : auth?.token ? (
             <div className="flex items-center justify-center gap-2">
               <Lock className="w-5 h-5" />
               Secure Checkout • {formatCurrency(finalAmount)}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center gap-2">
+              <Lock className="w-5 h-5" />
+              Please log in to checkout
             </div>
           )}
         </button>
