@@ -1,122 +1,165 @@
 import React, { useState, useEffect } from "react";
 import AdminMenu from "../../Components/AdminMenu";
 import Layout from "../../Components/Layout";
-import axios from "axios";
-import { toast } from "react-hot-toast";
+import { Select } from "antd";
 import { useAuth } from "../../context/authContext";
 import moment from "moment";
-import { Select } from "antd";
+import axiosInstance from "../../utils/axiosInstance";
 
 const { Option } = Select;
+
 const AdminOrders = () => {
-  const [status, setStatus] = useState([
+  const [status] = useState([
     "Not Process",
     "Processing",
     "Shipped",
     "deliver",
     "cancel",
   ]);
-  const [changedStutus, setChangedStutus] = useState("");
   const [orders, setOrders] = useState([]);
-  const [auth, setAuth] = useAuth();
-  //Getting order
+  const [auth] = useAuth();
+  const [loading, setLoading] = useState(true);
+
   const getOrder = async () => {
     try {
-      const { data } = await axios.get(
-        "http://localhost:8080/api/v1/auth/allorders"
-      );
+      setLoading(true);
+      const { data } = await axiosInstance.get("/v1/auth/allorders");
       setOrders(data);
-      console.log(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     if (auth?.token) getOrder();
   }, [auth?.token]);
-  //
+
   const handleChange = async (orderId, value) => {
     try {
-      const { data } = await axios.put(
-        `http://localhost:8080/api/v1/auth/orderstatus/${orderId}`,
-        { status: value }
-      );
+      await axiosInstance.put(`/v1/auth/orderstatus/${orderId}`, {
+        status: value,
+      });
       getOrder();
     } catch (error) {
       console.log(error);
     }
   };
-  return (
-    <>
-      <Layout>
-        <div className="row">
-          <div className="col-md-3">
-            <AdminMenu />
-          </div>
-          <div className="col-md-9">
-            <h1 className="text-2xl font-semibold m-4 ">All Orders</h1>
 
-            {orders?.map((o, i) => (
-              <div className="border shadow" key={o?._id}>
-                <table className="table">
-                  <thead>
-                    <tr>
-                      <td style={{ width: "5%" }} scope="col">
-                        #
-                      </td>{" "}
-                      {/* Set width for each column */}
-                      <td style={{ width: "20%" }} scope="col">
-                        Product
-                      </td>
-                      <td style={{ width: "15%" }} scope="col">
-                        Status
-                      </td>
-                      <td style={{ width: "20%" }} scope="col">
-                        Buyer
-                      </td>
-                      <td style={{ width: "15%" }} scope="col">
-                        Orders
-                      </td>
-                      <td style={{ width: "15%" }} scope="col">
-                        Payment
-                      </td>
-                      <td style={{ width: "10%" }} scope="col">
-                        Quantity
-                      </td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>{i + 1}</td>
-                      <td className="w-64">
-                        {o?.products?.map((product) => product.name).join(", ")}
-                      </td>
-                      <td>
-                        <Select
-                          border={false}
-                          onChange={(value) => handleChange(o._id, value)}
-                          defaultValue={o?.status}
-                        >
-                          {status.map((stat, index) => (
-                            <Option key={index} value={stat}>
-                              {stat}
-                            </Option>
-                          ))}
-                        </Select>
-                      </td>
-                      <td>{o?.buyer?.name}</td>
-                      <td>{moment(o?.createdAt).fromNow()}</td>
-                      <td>{o?.payment.success ? "Success" : "Failed"}</td>
-                      <td>{o?.products?.length}</td>
-                    </tr>
-                  </tbody>
-                </table>
+  return (
+    <Layout>
+      <div className="min-h-screen bg-gray-50/50">
+        <div className="w-full px-4 py-6">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Sidebar */}
+            <div className="lg:w-1/5">
+              <AdminMenu />
+            </div>
+
+            {/* Orders Section */}
+            <div className="lg:w-4/5">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+                <h1 className="text-2xl font-bold text-gray-900">All Orders</h1>
+                <p className="text-gray-500 mt-1">Manage and track customer orders</p>
               </div>
-            ))}
+
+              {loading ? (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  <p className="text-center text-gray-600">Loading orders...</p>
+                </div>
+              ) : orders.length === 0 ? (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                  <p className="text-center text-gray-600">No orders found.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {orders.map((order, i) => (
+                    <div
+                      key={order._id}
+                      className="bg-white rounded-lg shadow p-4 space-y-3 border"
+                    >
+                      {/* Row 1: Order Info */}
+                      <div className="flex flex-wrap justify-between text-sm text-gray-600">
+                        <span className="font-semibold text-gray-800">
+                          Order #{order._id.slice(-6)}
+                        </span>
+                        <span>
+                          Customer: {order.buyer?.name}
+                        </span>
+                        <span>
+                          {moment(order.createdAt).format("MMM Do YYYY, h:mm A")}
+                        </span>
+                        <span
+                          className={
+                            order.payment?.success
+                              ? "text-green-600"
+                              : "text-red-600"
+                          }
+                        >
+                          {order.payment?.success ? "✓ Paid" : "✗ Payment Failed"}
+                        </span>
+                      </div>
+
+                      {/* Row 2: Products */}
+                      {order.products.map((product) => (
+                        <div
+                          key={product._id}
+                          className="flex items-start gap-4 border-t pt-4 mt-2"
+                        >
+                          <img
+                            src={product?.photo?.url || "/api/placeholder/80/80"}
+                            alt={product.name}
+                            className="w-20 h-20 object-cover rounded border"
+                            onError={(e) => (e.target.src = "/api/placeholder/80/80")}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <h4 className="font-medium text-gray-800 truncate max-w-[500px]">
+                              {product.name}
+                            </h4>
+                            <p className="text-gray-500 text-sm truncate max-w-[600px]">
+                              {product.description}
+                            </p>
+                            <div className="mt-2 flex justify-between items-center text-sm text-gray-600">
+                              <span>Quantity: {order.products.length}</span>
+                              <span>${product.price?.toLocaleString()}</span>
+                              <div className="flex items-center gap-2">
+                                <span>Status:</span>
+                                <Select
+                                  defaultValue={order.status}
+                                  onChange={(value) => handleChange(order._id, value)}
+                                  className="min-w-[120px]"
+                                >
+                                  {status.map((s) => (
+                                    <Option key={s} value={s}>
+                                      {s}
+                                    </Option>
+                                  ))}
+                                </Select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+
+                      {/* Row 3: Order Summary */}
+                      <div className="flex justify-between items-center pt-3 border-t text-sm">
+                        <span className="font-medium text-gray-600">
+                          Total Items: {order.products.length}
+                        </span>
+                        <span className="font-bold text-gray-900">
+                          Total Amount: ${order.products.reduce((sum, item) => sum + (item.price || 0), 0).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 

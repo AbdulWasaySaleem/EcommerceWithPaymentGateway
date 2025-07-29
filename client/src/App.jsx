@@ -21,10 +21,12 @@ import UpdateProduct from "./Pages/Admin/UpdateProduct";
 import Cartpage from "./Pages/Cartpage";
 import AdminOrders from "./Pages/Admin/AdminOrders";
 import ProductDetails from "./Pages/ProductsDetails";
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   return (
     <>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="product/:slug" element={<ProductDetails />} />

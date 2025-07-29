@@ -153,7 +153,7 @@ export const getOrdersController = async(req,res)=>{
 //All order
 export const getAllOrdersController = async(req,res)=>{
   try {
-    const orders = await orderModel.find({}).populate("buyer", "name").populate("products", "-photo")
+    const orders = await orderModel.find({}).populate("buyer", "name").populate("products")
     res.json(orders)
   } catch (error) {
     console.log(error);
@@ -181,14 +181,32 @@ export const orderStatusController = async(req,res)=>{
   }
 }
 
-
-
-
-
-
-
 //test
 export const testController = (req, res) => {
   return res.send("pritected route ");
 };
 
+export const getSummaryController = async (req, res) => {
+  try {
+    const users = await userModel.countDocuments();
+    const orders = await orderModel.countDocuments();
+    const products = await orderModel.aggregate([
+      { $unwind: "$products" },
+      { $group: { _id: null, total: { $sum: 1 } } }
+    ]);
+    const totalProducts = products.length > 0 ? products[0].total : 0;
+
+    res.json({
+      users,
+      orders,
+      products: totalProducts
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error in getting summary",
+      error,
+    });
+  }
+}

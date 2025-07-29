@@ -1,118 +1,112 @@
 import Layout from "../Components/Layout";
+import { Shield, Lock, Eye, Database } from "lucide-react";
 
 const Policy = () => {
-  return (
-    <>
-      <Layout>
-      <div className="bg-gray-100">
-  <div className="container mx-auto px-4 py-8">
-    <h1 className="text-3xl font-bold mb-4">Privacy Policy</h1>
-    <p className="mb-4">
-      This privacy policy sets out how our website uses and protects any information that you give us when you use
-      this
-      website.
-    </p>
-    <h2 className="text-2xl font-bold mb-2">Information We Collect</h2>
-    <p className="mb-4">
-      We may collect the following information:
-    </p>
-    <ul className="list-disc list-inside mb-4">
-      <li>Your name and contact information</li>
-      <li>Demographic information</li>
-      <li>Other information relevant to customer surveys and/or offers</li>
-    </ul>
-    <h2 className="text-2xl font-bold mb-2">How We Use the Information</h2>
-    <p className="mb-4">
-      We require this information to understand your needs and provide you with a better service, and in
-      particular
-      for
-      the following reasons:
-    </p>
-    <ul className="list-disc list-inside mb-4">
-      <li>Internal record keeping</li>
-      <li>Improving our products and services</li>
-      <li>Sending promotional emails about new products, special offers, or other information which we think you
-        may
-        find
-        interesting</li>
-      <li>From time to time, we may also use your information to contact you for market research purposes. We may
-        contact
-        you by email, phone, or mail. We may use the information to customize the website according to your
-        interests.</li>
-    </ul>
-    <h2 className="text-2xl font-bold mb-2">Security</h2>
-    <p className="mb-4">
-      We are committed to ensuring that your information is secure. In order to prevent unauthorized access or
-      disclosure,
-      we have put in place suitable physical, electronic, and managerial procedures to safeguard and secure the
-      information we collect online.
-    </p>
-    <h2 className="text-2xl font-bold mb-2">Cookies</h2>
-    <p className="mb-4">
-      A cookie is a small file that asks permission to be placed on your computer's hard drive. Once you agree,
-      the
-      file
-      is added, and the cookie helps analyze web traffic or lets you know when you visit a particular site.
-      Cookies
-      allow
-      web applications to respond to you as an individual. The web application can tailor its operations to your
-      needs,
-      likes, and dislikes by gathering and remembering information about your preferences.
-    </p>
-    <p className="mb-4">
-      Overall, cookies help us provide you with a better website by enabling us to monitor which pages you find
-      useful
-      and which you do not. A cookie in no way gives us access to your computer or any information about you,
-      other
-      than
-      the data you choose to share with us.
-    </p>
-    <h2 className="text-2xl font-bold mb-2">Links to Other Websites</h2>
-    <p className="mb-4">
-      Our website may contain links to other websites of interest. However, once you have used these links to
-      leave
-      our
-      site, you should note that we do not have any control over that other website. Therefore, we cannot be
-      responsible
-      for the protection and privacy of any information which you provide whilst visiting such sites and such
-      sites
-      are
-      not governed by this privacy statement. You should exercise caution and look at the privacy statement
-      applicable
-      to
-      the website in question.
-    </p>
-    <h2 className="text-2xl font-bold mb-2">Controlling Your Personal Information</h2>
-    <p className="mb-4">
-      You may choose to restrict the collection or use of your personal information in the following ways:
-    </p>
-    <ul className="list-disc list-inside mb-4">
-      <li>If you have previously agreed to us using your personal information for direct marketing purposes, you
-        may
-        change your mind at any time by writing to or emailing us at [email protected]</li>
-      <li>We will not sell, distribute, or lease your personal information to third parties unless we have your
-        permission
-        or are required by law to do so. We may use your personal information to send you promotional
-        information
-        about
-        third parties which we think you may find interesting if you tell us that you wish this to happen.</li>
-      <li>You may request details of personal information which we hold about you. If you would like a copy of the
-        information held on you, please write to [Your Company Name, Address, City, State, Zip Code] or email
-        [email protected]</li>
-      <li>If you believe that any information we are holding on you is incorrect or incomplete, please write to or
-        email
-        us as soon as possible at the above address. We will promptly correct any information found to be
-        incorrect.
-      </li>
-    </ul>
-    <p className="mb-4">
-      This privacy policy is subject to change without notice.
-    </p>
-  </div>
-</div>
+  const sections = [
+    {
+      icon: Shield,
+      title: "Security",
+      content: "We are committed to ensuring that your information is secure. We have put in place suitable physical, electronic, and managerial procedures to safeguard and secure the information we collect online."
+    },
+    {
+      icon: Lock,
+      title: "Privacy Protection",
+      content: "Your privacy is important to us. We only collect and use your personal information for specific, identified purposes related to our services."
+    },
+    {
+      icon: Eye,
+      title: "Transparency",
+      content: "We believe in being transparent about our data practices. You can always request information about what data we hold about you."
+    },
+    {
+      icon: Database,
+      title: "Data Control",
+      content: "You have control over your data. You can request to view, update, or delete your personal information at any time."
+    }
+  ];
 
-      </Layout>
-    </>
+  return (
+    <Layout>
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl font-bold text-white mb-4">Privacy Policy</h1>
+            <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+              Your privacy is important to us. This policy outlines how we collect,
+              use, and protect your personal information.
+            </p>
+          </div>
+        </div>
+
+        {/* Key Points */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {sections.map((section, index) => (
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+                  <section.icon size={24} />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{section.title}</h3>
+                <p className="text-gray-600">{section.content}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Detailed Policy */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+            <div className="prose max-w-none">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Information We Collect</h2>
+              <p className="text-gray-600 mb-4">
+                We collect information that you provide directly to us, including:
+              </p>
+              <ul className="list-disc pl-6 text-gray-600 mb-8">
+                <li>Name and contact information</li>
+                <li>Account credentials</li>
+                <li>Payment information</li>
+                <li>Communication preferences</li>
+              </ul>
+
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">How We Use Your Information</h2>
+              <p className="text-gray-600 mb-4">
+                We use the collected information for various purposes:
+              </p>
+              <ul className="list-disc pl-6 text-gray-600 mb-8">
+                <li>To provide and maintain our services</li>
+                <li>To notify you about changes to our services</li>
+                <li>To provide customer support</li>
+                <li>To gather analysis or valuable information to improve our services</li>
+              </ul>
+
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Your Rights</h2>
+              <p className="text-gray-600 mb-4">
+                You have several rights regarding your personal data:
+              </p>
+              <ul className="list-disc pl-6 text-gray-600 mb-8">
+                <li>The right to access your personal data</li>
+                <li>The right to rectification of your personal data</li>
+                <li>The right to erasure of your personal data</li>
+                <li>The right to restrict processing of your personal data</li>
+              </ul>
+
+              <div className="bg-blue-50 rounded-lg p-6 mb-8">
+                <h3 className="text-lg font-semibold text-blue-900 mb-2">Contact Us</h3>
+                <p className="text-blue-800">
+                  If you have any questions about this Privacy Policy, please contact us at{" "}
+                  <a href="mailto:privacy@mycompany.com" className="text-blue-600 hover:underline">
+                    privacy@mycompany.com
+                  </a>
+                </p>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Last updated: {new Date().toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>
   );
 };
 

@@ -1,8 +1,9 @@
-import { ShoppingCart } from "lucide-react";
+import { Edit, ShoppingCart } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
-const ProductCard = ({ product, cart, setCart }) => {
+const ProductCard = ({ product, cart, setCart, isAdmin }) => {
   const navigate = useNavigate();
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -17,6 +18,12 @@ const ProductCard = ({ product, cart, setCart }) => {
 
   const handleViewProduct = () => {
     navigate(`/product/${product.slug}`);
+  };
+
+  // Add this function for admin actions
+  const handleAdminAction = (e) => {
+    e.stopPropagation();
+    navigate(`/dashboard/admin/products/${product.slug}`);
   };
 
   const imageUrl = product?.photo?.url
@@ -52,7 +59,7 @@ const ProductCard = ({ product, cart, setCart }) => {
           }`}
           onLoad={() => setIsImageLoaded(true)}
         />
-        
+
         {/* Overlay View Button */}
         <div
           className={`absolute inset-0 flex items-center justify-center transition-all duration-300 rounded-t-2xl bg-black/20 backdrop-blur-sm ${
@@ -89,19 +96,29 @@ const ProductCard = ({ product, cart, setCart }) => {
             {formatPrice(product.price)}
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 text-sm flex items-center space-x-1"
-          >
-            <ShoppingCart className="w-4 h-4" />
-            <span>Add</span>
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={handleAdminAction}
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 text-sm flex items-center space-x-1"
+            >
+              <Edit className="w-4 h-4" />
+              <span>Edit</span>
+            </button>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-2 px-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 text-sm flex items-center space-x-1"
+            >
+              <ShoppingCart className="w-4 h-4" />
+              <span>Add</span>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Subtle border animation */}
       <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-blue-200/50 transition-all duration-300 pointer-events-none" />
-      
+
       {/* Subtle shine effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none" />
     </div>
