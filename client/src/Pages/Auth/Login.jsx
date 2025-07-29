@@ -1,23 +1,23 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import axios from "axios";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "../../Components/Layout";
 import { useAuth } from "../../context/authContext";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth,setAuth] = useAuth()
+  const [auth, setAuth] = useAuth();
 
   const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8080/api/v1/auth/login`, {
+      const res = await axiosInstance.post(`/v1/auth/login`, {
         email,
         password,
       });
@@ -26,17 +26,24 @@ const Login = () => {
         setAuth({
           ...auth,
           user: res.data.user,
-          token : res.data.token
-        })
-        localStorage.setItem("auth", JSON.stringify(res.data))
+          token: res.data.token,
+        });
+        localStorage.setItem("auth", JSON.stringify(res.data));
         navigate(location.state || "/");
       } else {
         toast.error(res.data.message);
       }
     } catch (error) {
       console.log(error);
-     
-      toast.error("Something went Wrong");
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Something went wrong");
+      }
     }
   };
   return (
@@ -89,7 +96,9 @@ const Login = () => {
               <button
                 type="button"
                 className="text-blue-500 w-full"
-                  onClick={()=>{navigate("/forgot-password")}}
+                onClick={() => {
+                  navigate("/forgot-password");
+                }}
               >
                 Forgot Password
               </button>

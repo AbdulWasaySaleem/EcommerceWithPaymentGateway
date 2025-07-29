@@ -1,4 +1,3 @@
-import React from "react";
 import Layout from "../../Components/Layout";
 import AdminMenu from "../../Components/AdminMenu";
 import { useAuth } from "../../context/authContext";
@@ -12,6 +11,7 @@ import {
   Calendar,
 } from "lucide-react";
 import moment from "moment";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const AdminProfile = () => {
   const [auth] = useAuth();
@@ -67,6 +67,9 @@ const AdminProfile = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+            <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "Profile", active: true }]}
+              />
               {/* Profile Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                 <div className="p-6">

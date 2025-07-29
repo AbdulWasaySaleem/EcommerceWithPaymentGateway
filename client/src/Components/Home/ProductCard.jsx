@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useCart } from "../../context/cart";
+import { formatCurrency } from "../Cart/formatecurrency";
 
 const ProductCard = ({ product, isAdmin }) => {
   const navigate = useNavigate();
@@ -25,8 +26,8 @@ const ProductCard = ({ product, isAdmin }) => {
     }
 
     setCart(existingCart); // Update context state
-    localStorage.setItem("cart", JSON.stringify(existingCart)); // Also update localStorage
     toast.success("Added to cart");
+    localStorage.setItem("cart", JSON.stringify(existingCart)); // Also update localStorage
   };
 
   const handleViewProduct = () => {
@@ -42,13 +43,6 @@ const ProductCard = ({ product, isAdmin }) => {
   const imageUrl = product?.photo?.url
     ? `${product.photo.url}?f_auto`
     : "/default-product.jpg";
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(price);
-  };
 
   return (
     <div
@@ -106,7 +100,7 @@ const ProductCard = ({ product, isAdmin }) => {
         {/* Price and Actions */}
         <div className="flex items-center justify-between pt-2">
           <div className="text-lg font-bold text-green-600">
-            {formatPrice(product.price)}
+            {formatCurrency(product.price)}
           </div>
 
           {isAdmin ? (

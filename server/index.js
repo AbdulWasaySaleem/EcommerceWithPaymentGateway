@@ -1,14 +1,12 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import colors from "colors";
 import morgan from "morgan";
 import connectDb from "./config/db.js";
 import authRoutes from "./routes/authRoute.js";
 import categoryRoutes from "./routes/categoryRoute.js";
 import productRoutes from "./routes/productRoutes.js";
 import emailRoutes from "./routes/emailRoute.js";
-import nodemailer from "nodemailer";
 //configure Env
 dotenv.config();
 //Mongo Connection from folder db.js
@@ -20,7 +18,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:5173"
+    origin: process.env.CLIENT_ORIGIN,
   })
 );
 app.use(express.json({ limit: "10mb" })); // Adjust the limit as needed

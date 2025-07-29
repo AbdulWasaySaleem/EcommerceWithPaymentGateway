@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { Modal } from "antd";
 import { Plus, Edit2, Trash2, Tag } from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -101,6 +102,9 @@ const CreateCategory = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+             <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "Category", active: true }]}
+              />
               {/* Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">Categories</h1>

@@ -1,5 +1,3 @@
-import React from "react";
-
 const DevBanner = () => {
   return (
     <div className="bg-blue-600 text-white text-xs py-2 text-center shadow-md">
@@ -12,7 +10,7 @@ const DevBanner = () => {
       >
         Contact me
       </a>
-      for more detail
+      {" "}for more detail
     </div>
   );
 };

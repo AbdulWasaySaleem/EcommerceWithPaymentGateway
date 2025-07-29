@@ -41,15 +41,13 @@ const Contact = () => {
     {
       icon: Mail,
       label: "Email",
-      value: "support@mycompany.com",
-      link: "mailto:support@mycompany.com",
+      value: "support@swiftbuy.com"
     },
     {
       icon: MapPin,
       label: "Address",
-      value: "123 Business Street, NY 10001",
-      link: "https://maps.google.com",
-    },
+      value: "123 Business Street, NY 10001"
+    }
   ];
 
   return (

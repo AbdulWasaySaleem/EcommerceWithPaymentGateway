@@ -29,11 +29,18 @@ import AdminRoute from "./Components/Routes/AdminRoute";
 import Private from "./Components/Routes/Private";
 import LoadingSpinner from "./Components/common/LoadingSpinner";
 
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
 function App() {
   return (
     <>
       <ScrollToTop />
       <Suspense fallback={<LoadingSpinner />}>
+        <ToastContainer
+          position="bottom-right"
+          pauseOnHover
+        />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="product/:slug" element={<ProductDetails />} />

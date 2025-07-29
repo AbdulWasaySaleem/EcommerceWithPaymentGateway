@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 import { useNavigate} from "react-router-dom";
 import Layout from "../../Components/Layout";
+import axiosInstance from "../../utils/axiosInstance";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const ForgotPassword = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8080/api/v1/auth/forgot-password`, {
+      const res = await axiosInstance.post(`/v1/auth/forgot-password`, {
         email,
         newPassword,
         answer

@@ -56,8 +56,6 @@ const HomePage = () => {
     }
   };
 
-  // Get total count
-
   // Load filtered products
   const loadFilteredProducts = async () => {
     try {

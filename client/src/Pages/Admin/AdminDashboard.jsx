@@ -12,6 +12,7 @@ import {
 import axiosInstance from "../../utils/axiosInstance";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const AdminDashboard = () => {
   const [summary, setSummary] = useState({
@@ -98,6 +99,9 @@ const AdminDashboard = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+            <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "Dashboard", active: true }]}
+              />
               {/* Welcome Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">

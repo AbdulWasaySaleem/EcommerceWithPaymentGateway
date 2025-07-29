@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-const Spinner = ({path = "login"}) => {
+const Spinner = ({ path = "login" }) => {
   const [count, setCount] = useState(3);
   const navigate = useNavigate();
   const location = useLocation();
@@ -21,13 +21,13 @@ const Spinner = ({path = "login"}) => {
         className="d-flex flex-column justify-content-center align-items-center"
         style={{ height: "100vh" }}
       >
-        <h1 className="Text-center">Something went wrong, redirecting you in {count} second </h1>
+        <h1 className="Text-center">
+          Something went wrong, redirecting you in {count} second{" "}
+        </h1>
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-     
-
     </>
   );
 };

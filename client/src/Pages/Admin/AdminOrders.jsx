@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import AdminMenu from "../../Components/AdminMenu";
 import Layout from "../../Components/Layout";
 import { Select } from "antd";
 import { useAuth } from "../../context/authContext";
 import moment from "moment";
 import axiosInstance from "../../utils/axiosInstance";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const { Option } = Select;
 
@@ -59,6 +60,9 @@ const AdminOrders = () => {
 
             {/* Orders Section */}
             <div className="lg:w-4/5">
+            <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "Orders", active: true }]}
+              />
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">All Orders</h1>
                 <p className="text-gray-500 mt-1">Manage and track customer orders</p>
@@ -74,7 +78,7 @@ const AdminOrders = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {orders.map((order, i) => (
+                  {orders.map((order) => (
                     <div
                       key={order._id}
                       className="bg-white rounded-lg shadow p-4 space-y-3 border"

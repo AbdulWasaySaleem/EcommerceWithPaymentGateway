@@ -6,6 +6,7 @@ import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Upload} from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 const { Option } = Select;
 
 const CreateProduct = () => {
@@ -79,6 +80,9 @@ const CreateProduct = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+             <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "Products", active: true }]}
+              />
               {/* Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">

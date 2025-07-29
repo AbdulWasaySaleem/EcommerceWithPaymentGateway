@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import{ useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
 import UserMenu from "../../Components/UserMenu";
 import { Link } from "react-router-dom";
@@ -7,16 +7,14 @@ import {
   Clock,
   CheckCircle,
   XCircle,
-  Calendar,
   ArrowRight,
-  CreditCard,
   ShoppingBag,
   Users,
   Home,
 } from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
 import { useAuth } from "../../context/authContext";
-import moment from "moment";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const Dashboard = () => {
   const [orders, setOrders] = useState([]);
@@ -103,6 +101,9 @@ const Dashboard = () => {
             {/* Main Content */}
             <div className="lg:w-4/5 space-y-6">
               {/* Welcome Banner */}
+              <Breadcrumbs
+                items={[{ name: "Dashboard" }, { name: "user", active: true }]}
+              />
               <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm">
                 <div className="flex flex-col md:flex-row items-center justify-between">
                   <div>

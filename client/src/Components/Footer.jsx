@@ -11,7 +11,7 @@ const Footer = () => {
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <span className="text-2xl">🛒</span>
-              <span className="text-xl font-bold text-white">MyCompany</span>
+              <span className="text-xl font-bold text-white">SwiftBuy</span>
             </Link>
             <p className="text-gray-400 text-sm">
               Your one-stop shop for all your needs. Quality products, great prices, and excellent service.
@@ -80,16 +80,16 @@ const Footer = () => {
         <div className="border-t border-gray-700 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm">
-              © {new Date().getFullYear()} MyCompany. All rights reserved.
+              © {new Date().getFullYear()} SwiftBuy. All rights reserved.
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link to="/terms" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link to="/policy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link to="/policy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/cookies" className="text-gray-400 hover:text-white text-sm transition-colors">
+              <Link to="/policy" className="text-gray-400 hover:text-white text-sm transition-colors">
                 Cookie Policy
               </Link>
             </div>

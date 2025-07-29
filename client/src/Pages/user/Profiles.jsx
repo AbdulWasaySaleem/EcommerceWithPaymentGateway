@@ -1,3 +1,4 @@
+import Breadcrumbs from "../../Components/Breadcrumbs";
 import Layout from "../../Components/Layout";
 import UserMenu from "../../Components/UserMenu";
 import { useAuth } from "../../context/authContext";
@@ -66,6 +67,9 @@ const Profiles = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+            <Breadcrumbs
+                items={[{ name: "Dashboard" }, { name: "profile", active: true }]}
+              />
               {/* Profile Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
                 <div className="p-6">

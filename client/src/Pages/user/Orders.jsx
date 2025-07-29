@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
 import UserMenu from "../../Components/UserMenu";
-import axios from "axios";
 import { useAuth } from "../../context/authContext";
 import moment from "moment";
 import axiosInstance from "../../utils/axiosInstance";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -38,6 +38,9 @@ const Orders = () => {
 
             {/* Orders Section */}
             <div className="lg:w-4/5">
+            <Breadcrumbs
+                items={[{ name: "Dashboard" }, { name: "Orders", active: true }]}
+              />
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <h1 className="text-2xl font-bold text-gray-900">My Orders</h1>
                 <p className="text-gray-500 mt-1">View and track your orders</p>

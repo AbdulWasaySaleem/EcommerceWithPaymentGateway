@@ -18,7 +18,7 @@ const About = () => {
             <div className="lg:grid lg:grid-cols-2 lg:gap-8 items-center">
               <div className="mb-8 lg:mb-0">
                 <h1 className="text-4xl font-bold text-white mb-6">
-                  About <span className="text-blue-400">MyCompany</span>
+                  About <span className="text-blue-400">SwiftBuy</span>
                 </h1>
                 <p className="text-gray-300 text-lg leading-relaxed mb-8">
                   We're dedicated to providing the best shopping experience for our customers. 

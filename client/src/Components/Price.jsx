@@ -1,5 +1,3 @@
-
-//Utility File
 export const Price = [
   {
     _id : 0,

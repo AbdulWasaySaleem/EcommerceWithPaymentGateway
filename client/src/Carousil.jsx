@@ -23,7 +23,7 @@ const Carousel = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto rounded-xl overflow-hidden shadow-md mt-4">
-      <div className="overflow-hidden h-[260px] sm:h-[300px] md:h-[360px]" ref={emblaRef}>
+      <div className="overflow-hidden h-[180px] sm:h-[250px] md:h-[360px]" ref={emblaRef}>
         <div className="flex">
           {images.map((img, index) => (
             <div
@@ -34,7 +34,7 @@ const Carousel = () => {
                 src={img}
                 alt={`Slide ${index + 1}`}
                 className="w-full h-full object-cover"
-                loading="lazy"
+                loading={index === 0 ? "eager" : "lazy"}
               />
             </div>
           ))}

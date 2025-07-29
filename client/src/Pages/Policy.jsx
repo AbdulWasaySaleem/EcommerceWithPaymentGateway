@@ -93,8 +93,8 @@ const Policy = () => {
                 <h3 className="text-lg font-semibold text-blue-900 mb-2">Contact Us</h3>
                 <p className="text-blue-800">
                   If you have any questions about this Privacy Policy, please contact us at{" "}
-                  <a href="mailto:privacy@mycompany.com" className="text-blue-600 hover:underline">
-                    privacy@mycompany.com
+                  <a  className="text-blue-600 hover:underline">
+                    privacy@swiftbuy.com
                   </a>
                 </p>
               </div>

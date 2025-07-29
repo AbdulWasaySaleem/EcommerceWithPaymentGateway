@@ -1,5 +1,6 @@
-import { Trash2, Plus, Minus, Heart, Star, Package } from "lucide-react";
+import { Trash2, Plus, Minus, Heart, Package } from "lucide-react";
 import { useState } from "react";
+import { formatCurrency } from "./formatecurrency";
 
 const CartItem = ({ product, onRemove, onUpdateQty, isUpdating }) => {
   const [isRemoving, setIsRemoving] = useState(false);
@@ -18,14 +19,6 @@ const CartItem = ({ product, onRemove, onUpdateQty, isUpdating }) => {
     if (newQty < 1 || newQty > 99) return;
     setQuantity(newQty);
     await onUpdateQty(product._id, newQty);
-  };
-
-  const formatPrice = (price) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: 2,
-    }).format(price);
   };
 
   return (
@@ -94,16 +87,16 @@ const CartItem = ({ product, onRemove, onUpdateQty, isUpdating }) => {
             <div className="flex sm:flex-col sm:items-end sm:justify-between gap-4 sm:gap-2">
               <div className="text-right">
                 <div className="text-xl font-bold text-gray-900">
-                  {formatPrice(product.price)}
+                  {formatCurrency(product.price)}
                 </div>
                 {product.originalPrice &&
                   product.originalPrice > product.price && (
                     <div className="text-sm text-gray-500 line-through">
-                      {formatPrice(product.originalPrice)}
+                      {formatCurrency(product.originalPrice)}
                     </div>
                   )}
                 <div className="text-xs text-gray-600 mt-1">
-                  Total: {formatPrice(product.price * quantity)}
+                  Total: {formatCurrency(product.price * quantity)}
                 </div>
               </div>
 

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
 import AdminMenu from "../../Components/AdminMenu";
 import { toast } from "react-hot-toast";
-import axios from "axios";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";

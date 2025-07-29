@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
 import Layout from "../../Components/Layout";
+import axiosInstance from "../../utils/axiosInstance";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -12,21 +12,28 @@ const Register = () => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [answer, setAnswer] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8080/api/v1/auth/register`, {name,email,password,address,phone, answer})
-      if(res.data.success){
-        toast.success(res.data.message)
-        navigate("/login")
-      }else{
-        toast.error(res.data.message)
+      const res = await axiosInstance.post(`/v1/auth/register`, {
+        name,
+        email,
+        password,
+        address,
+        phone,
+        answer,
+      });
+      if (res.data.success) {
+        toast.success(res.data.message);
+        navigate("/login");
+      } else {
+        toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error)
-      toast.error("Something went Wrong")
+      console.log(error);
+      toast.error("Something went Wrong");
     }
   };
 
@@ -45,7 +52,9 @@ const Register = () => {
           >
             <div className="bg-gray-100 p-8 rounded-md shadow-xl w-96">
               <div className="border-b-2 border-gray-500">
-                <h1 className="text-2xl font-bold mb-2  text-center">Register</h1>
+                <h1 className="text-2xl font-bold mb-2  text-center">
+                  Register
+                </h1>
               </div>
               <div className="flex flex-col gap-4 m-2">
                 <input

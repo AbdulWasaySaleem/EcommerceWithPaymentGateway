@@ -5,6 +5,7 @@ import { useAuth } from "../context/authContext";
 import { ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../Components/common/LoadingSpinner";
+import toast from "react-hot-toast";
 
 const Cartskeleton = lazy(() => import("../Components/Cart/Cartskeleton"));
 const EmptyCart = lazy(() => import("../Components/Cart/EmptyCart"));
@@ -28,6 +29,7 @@ const CartPage = () => {
 
       const updatedCart = cart.filter((item) => item._id !== pid);
       setCart(updatedCart);
+      toast.success("Item removed from cart!");
       localStorage.setItem("cart", JSON.stringify(updatedCart));
     } finally {
       setIsUpdating(false);
@@ -46,6 +48,7 @@ const CartPage = () => {
         item._id === pid ? { ...item, quantity: qty, cartQuantity: qty } : item
       );
       setCart(updatedCart);
+      toast.success("Cart updated successfully!");
       localStorage.setItem("cart", JSON.stringify(updatedCart));
     } finally {
       setIsUpdating(false);

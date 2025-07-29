@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react'
 import { useAuth } from '../../context/authContext'
-import axios from 'axios'
 import { Outlet } from 'react-router-dom'
 import Spinner from '../spinner'
+import axiosInstance from '../../utils/axiosInstance'
 
 //Protectigng route so canta cces without login
 const AdminRoute =  () => {
   const [ok, setOk] = useState(false)
-  const [auth,setAuth] = useAuth()
+  const [auth] = useAuth()
   
   useEffect(()=>{
     const authcheck = async ()=>{
-      const res = await axios.get("http://localhost:8080/api/v1/auth/admin-auth")
+      const res = await axiosInstance.get("/v1/auth/admin-auth")
       if(res.data.ok) {
         setOk(true)
       }else{

@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import ProductCard from "../../Components/Home/ProductCard";
 import axiosInstance from "../../utils/axiosInstance";
 import { Package } from "lucide-react";
+import Breadcrumbs from "../../Components/Breadcrumbs";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -46,6 +47,9 @@ const Products = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
+             <Breadcrumbs
+                items={[{ name: "Admin" }, { name: "All-Products", active: true }]}
+              />
               {/* Header */}
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
                 <div className="flex justify-between items-center">
