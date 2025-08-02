@@ -6,6 +6,7 @@ import { Modal } from "antd";
 import { Plus, Edit2, Trash2, Tag } from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
 import Breadcrumbs from "../../Components/Breadcrumbs";
+import getErrorMessage from "../../utils/getErrorMessage";
 
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -22,6 +23,7 @@ const CreateCategory = () => {
       const { data } = await axiosInstance.post("/v1/category/createcategory", {
         name,
       });
+      console.log(data);
       if (data?.success) {
         toast.success(`${name} is created`);
         setName("");
@@ -29,7 +31,7 @@ const CreateCategory = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error creating category");
+      toast.error(getErrorMessage(error, "Error creating category"));
     }
   };
 
@@ -70,7 +72,7 @@ const CreateCategory = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error updating category");
+      toast.error(getErrorMessage(error, "Error creating category"));
     }
   };
 
@@ -86,7 +88,7 @@ const CreateCategory = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error deleting category");
+      toast.error(getErrorMessage(error, "Error creating category"));
     }
   };
 
@@ -102,7 +104,7 @@ const CreateCategory = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
-             <Breadcrumbs
+              <Breadcrumbs
                 items={[{ name: "Admin" }, { name: "Category", active: true }]}
               />
               {/* Header */}

@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
+import getErrorMessage from "../../utils/getErrorMessage";
 
 const { Option } = Select;
 
@@ -73,13 +74,11 @@ const UpdateProduct = () => {
 
       if (data?.success) {
         toast.success("Product Updated Successfully!");
-        navigate(-1)
-      } else {
-        toast.error(data?.message);
+        navigate(-1);
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong!");
+      toast.error(getErrorMessage(error, "Error on product"));
     }
   };
 
@@ -94,7 +93,7 @@ const UpdateProduct = () => {
       navigate("/dashboard/admin/products");
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong while deleting!");
+      toast.error(getErrorMessage(error, "Error on product"));
     }
   };
 

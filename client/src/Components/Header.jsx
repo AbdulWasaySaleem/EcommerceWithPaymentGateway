@@ -12,7 +12,6 @@ import {
   LogOut,
   Layout,
 } from "lucide-react";
-import DevBanner from "./common/DevBanner";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
@@ -88,8 +87,8 @@ const Header = () => {
       to="/Cart"
       onClick={onClick}
       className={`relative group text-gray-300 hover:text-white hover:bg-white/10 ${
-        isMobile 
-          ? "flex items-center px-4 py-3 rounded-xl text-base font-medium min-h-[48px]" 
+        isMobile
+          ? "flex items-center px-4 py-3 rounded-xl text-base font-medium min-h-[48px]"
           : "px-4 py-2 rounded-lg text-sm font-medium"
       } transition-all duration-200 ${className}`}
     >
@@ -98,9 +97,11 @@ const Header = () => {
         <span className={isMobile ? "inline" : "hidden sm:inline"}>Cart</span>
       </span>
       {cart?.length > 0 && (
-        <span className={`absolute ${
-          isMobile ? "-top-1 left-7" : "-top-1 -right-1"
-        } bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold group-hover:bg-red-600 transition-colors`}>
+        <span
+          className={`absolute ${
+            isMobile ? "-top-1 left-7" : "-top-1 -right-1"
+          } bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold group-hover:bg-red-600 transition-colors`}
+        >
           {cart.length > 99 ? "99+" : cart.length}
         </span>
       )}
@@ -108,8 +109,7 @@ const Header = () => {
   );
 
   return (
-    <nav className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg sticky top-0 z-50 backdrop-blur-sm">
-      <DevBanner />
+    <nav className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 shadow-lg backdrop-blur-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -201,7 +201,7 @@ const Header = () => {
           <div className="flex items-center space-x-2 md:hidden">
             {/* Mobile Cart Button */}
             <CartButton onClick={closeMobileMenu} className="p-2" />
-            
+
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -234,7 +234,7 @@ const Header = () => {
                       <span>Login</span>
                     </span>
                   </MobileNavLink>
-                  
+
                   <Link
                     to="/register"
                     onClick={closeMobileMenu}

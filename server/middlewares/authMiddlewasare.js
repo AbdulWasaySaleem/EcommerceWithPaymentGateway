@@ -41,3 +41,21 @@ export const isAdmin = async (req, res, next) => {
     });
   }
 };
+
+export const isNotDemoAdmin = (req, res, next) => {
+  try {
+    if (req.user?.isDemoAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: "Demo Admins are not allowed to modify or add data",
+      });
+    }
+    next();
+  } catch (error) {
+    console.log("isNotDemoAdmin error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Middleware error",
+    });
+  }
+};

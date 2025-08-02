@@ -1,6 +1,12 @@
+import { useState } from "react";
+import AboutModal from "./AboutModal";
+
 const DevBanner = () => {
+  
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="bg-blue-600 text-white text-xs py-2 text-center shadow-md">
+    <>
+      <div className="bg-blue-700 text-white text-xs py-2 text-center shadow-md">
       ⚠️ This is a <strong>practice/demo project</strong> built for learning purposes only.
       <a
         href="https://github.com/AbdulWasaySaleem"
@@ -10,8 +16,10 @@ const DevBanner = () => {
       >
         Contact me
       </a>
-      {" "}for more detail
+      {" "}for more detail or {" "}<span className="underline cursor-pointer" onClick={() => setIsOpen(true)}>read about this project</span>
     </div>
+    {isOpen && <AboutModal onClose={() => setIsOpen(false)} />}
+    </>
   );
 };
 

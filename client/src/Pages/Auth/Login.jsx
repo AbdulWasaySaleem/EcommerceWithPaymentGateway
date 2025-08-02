@@ -1,7 +1,7 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { toast } from "react-hot-toast";
-import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "../../Components/Layout";
 import { useAuth } from "../../context/authContext";
 import axiosInstance from "../../utils/axiosInstance";
@@ -9,8 +9,9 @@ import axiosInstance from "../../utils/axiosInstance";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
+  const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -22,7 +23,7 @@ const Login = () => {
         password,
       });
       if (res.data.success) {
-        toast.success("login successfully");
+        toast.success("Login successful");
         setAuth({
           ...auth,
           user: res.data.user,
@@ -34,85 +35,103 @@ const Login = () => {
         toast.error(res.data.message);
       }
     } catch (error) {
-      console.log(error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
+      console.error(error);
+      if (error.response?.data?.message) {
         toast.error(error.response.data.message);
       } else {
         toast.error("Something went wrong");
       }
     }
   };
+
+  const loginAsDemoAdmin = () => {
+    setEmail("demoadmin@gmail.com");
+    setPassword("123456789");
+  };
+
   return (
-    <>
-      <Layout>
-        <form onSubmit={handleSubmit}>
-          <div
-            style={{
-              background: "#f3f4f6",
-              height: "85vh",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div className="bg-gray-100 p-8 rounded-md shadow-xl w-96">
-              <div className="border-b-2 border-gray-500">
-                <h1 className="text-2xl font-bold mb-2  text-center">
-                  Login Form
-                </h1>
-              </div>
-              <div className="flex flex-col gap-4 m-2">
-                <input
-                  className="w-full bg-gray-100 outline-none p-2 border-b-2 border-gray-500"
-                  type="email"
-                  placeholder="Email"
-                  required
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                  }}
-                />
-                <input
-                  className="w-full bg-gray-100 outline-none p-2 border-b-2 border-gray-500"
-                  type="password"
-                  placeholder="Password"
-                  required
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                  }}
-                />
-              </div>
-              <button
-                type="submit"
-                className="bg-slate-100 w-full p-2 m-2 text-lg rounded-full font-semibold border-2 border-solid border-gray-500 mx-auto hover:bg-slate-200"
-              >
-                Sign In
-              </button>
+    <Layout>
+      <div className="min-h-[85vh] flex items-center justify-center bg-gray-100 px-4">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md space-y-6"
+        >
+          <div className="text-center border-b pb-4">
+            <h2 className="text-3xl font-bold text-gray-800">Login</h2>
+            <p className="text-sm text-gray-500">Access your account</p>
+          </div>
+
+          <div className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 pr-10"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
               <button
                 type="button"
-                className="text-blue-500 w-full"
-                onClick={() => {
-                  navigate("/forgot-password");
-                }}
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500 hover:text-gray-800"
+                tabIndex={-1}
               >
-                Forgot Password
+                {showPassword ? (
+                  <EyeOff className="w-5 h-5" />
+                ) : (
+                  <Eye className="w-5 h-5" />
+                )}
               </button>
-              <p className="mt-2 text-gray-600 text-center">
-                Dont have an account?{" "}
-                <Link to="/register" className="text-blue-500">
-                  Register here
-                </Link>
-              </p>
+            </div>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-md font-semibold transition"
+          >
+            Sign In
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate("/forgot-password")}
+            className="w-full text-sm text-blue-500 text-center hover:underline"
+          >
+            Forgot Password?
+          </button>
+
+          <div className="text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link to="/register" className="text-blue-500 hover:underline">
+              Register here
+            </Link>
+          </div>
+
+          {/* 🚀 Quick Login Buttons */}
+          <div className="mt-6">
+            <p className="text-center text-gray-500 mb-2">Quick login:</p>
+            <div className="flex gap-4">
+              <button
+                type="button"
+                onClick={loginAsDemoAdmin}
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded-md text-sm font-medium"
+              >
+                Login as Demo Admin
+              </button>
             </div>
           </div>
         </form>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 

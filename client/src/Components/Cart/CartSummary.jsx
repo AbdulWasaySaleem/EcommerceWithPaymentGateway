@@ -163,6 +163,10 @@ const CartSummary = ({ cart, subtotalAmount, isUpdating }) => {
             <CreditCard className="w-4 h-4" />
             Payment Method
           </h3>
+          <p className="mt-2 text-sm text-yellow-700 bg-yellow-100 border border-yellow-300 rounded-md p-3">
+            <strong>Note:</strong> This is a practice/demo site. Please do{" "}
+            <u>not</u> enter real payment details.
+          </p>
 
           {!auth?.token ? (
             <p className="text-sm text-yellow-800 bg-yellow-100 border border-yellow-300 rounded-lg px-4 py-3 flex items-center gap-2">

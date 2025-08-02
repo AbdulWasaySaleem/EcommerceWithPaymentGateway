@@ -9,16 +9,22 @@ import {
   orderStatusController,
   getSummaryController,
 } from "../controllers/authController.js";
-import { isAdmin, requireSignIn } from "../middlewares/authMiddlewasare.js";
+import {
+  isAdmin,
+  isNotDemoAdmin,
+  requireSignIn,
+} from "../middlewares/authMiddlewasare.js";
 
 //router Obj
 const router = express.Router();
 
-//routing Register && Login || POST
+//@POST || Register user
 router.post("/register", registerController);
 
+//@POST || Login user
 router.post("/login", loginController);
-//forgotpassword Route || post
+
+//@POST || Forgot password
 router.post("/forgot-password", forgotController);
 
 //routing Login FOR ADMIN
@@ -33,19 +39,20 @@ router.get("/user-auth", requireSignIn, (req, res) => {
 router.get("/admin-auth", requireSignIn, isAdmin, (req, res) => {
   res.status(200).send({ ok: true });
 });
-//Orders
+//@GET || Get user orders
 router.get("/orders", requireSignIn, getOrdersController);
-//All-Orders
+//@GET || Get all orders for admin
 router.get("/allorders", requireSignIn, isAdmin, getAllOrdersController);
-//All-Orders-status
+//@PUT || Update order status
 router.put(
   "/orderstatus/:orderId",
   requireSignIn,
   isAdmin,
+  isNotDemoAdmin,
   orderStatusController
 );
 
-router.get("/summary-orders", requireSignIn,isAdmin, getSummaryController)
+router.get("/summary-orders", requireSignIn, isAdmin, getSummaryController);
 
 export default router;
 

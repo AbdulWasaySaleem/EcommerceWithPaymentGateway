@@ -4,9 +4,10 @@ import AdminMenu from "../../Components/AdminMenu";
 import { toast } from "react-hot-toast";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Upload} from "lucide-react";
+import { Upload } from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
 import Breadcrumbs from "../../Components/Breadcrumbs";
+import getErrorMessage from "../../utils/getErrorMessage";
 const { Option } = Select;
 
 const CreateProduct = () => {
@@ -58,7 +59,7 @@ const CreateProduct = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error creating product");
+      toast.error(getErrorMessage(error, "Error creating product"));
     } finally {
       setLoading(false);
     }
@@ -80,7 +81,7 @@ const CreateProduct = () => {
 
             {/* Main Content */}
             <div className="lg:w-4/5">
-             <Breadcrumbs
+              <Breadcrumbs
                 items={[{ name: "Admin" }, { name: "Products", active: true }]}
               />
               {/* Header */}

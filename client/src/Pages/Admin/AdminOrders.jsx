@@ -6,6 +6,8 @@ import { useAuth } from "../../context/authContext";
 import moment from "moment";
 import axiosInstance from "../../utils/axiosInstance";
 import Breadcrumbs from "../../Components/Breadcrumbs";
+import getErrorMessage from "../../utils/getErrorMessage";
+import { toast } from "react-toastify";
 
 const { Option } = Select;
 
@@ -45,6 +47,7 @@ const AdminOrders = () => {
       getOrder();
     } catch (error) {
       console.log(error);
+      toast.error(getErrorMessage(error, "Error creating category"));
     }
   };
 

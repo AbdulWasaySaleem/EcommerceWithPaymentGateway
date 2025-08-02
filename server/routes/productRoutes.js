@@ -1,5 +1,9 @@
 import express from "express";
-import { isAdmin, requireSignIn } from "../middlewares/authMiddlewasare.js";
+import {
+  isAdmin,
+  isNotDemoAdmin,
+  requireSignIn,
+} from "../middlewares/authMiddlewasare.js";
 import {
   braintreeController,
   braintreePaymentController,
@@ -13,52 +17,59 @@ import {
   productListController,
   updateProductController,
 } from "../controllers/productController.js";
-import formidable from "express-formidable";
 import upload from "../middlewares/uploadFile.js";
 const router = express.Router();
 
-//create product || POST
+//@POST || Creating a product
 router.post(
   "/createproduct",
   requireSignIn,
   isAdmin,
   upload.single("photo"),
+  isNotDemoAdmin,
   createProductController
 );
+//@DELETE || Delete a product
+router.delete(
+  "/delete/:pid",
+  requireSignIn,
+  isAdmin,
+  isNotDemoAdmin,
+  deleteProductController
+);
 
-//Get product || get
-router.get("/getproduct", getProductController);
-
-//Router.Delete || DELETE
-router.delete("/delete/:pid", deleteProductController);
-
-//create product || POST
+//@PUT || Update product
 router.put(
   "/editproduct/:pid",
   requireSignIn,
   isAdmin,
   upload.single("photo"),
+  isNotDemoAdmin,
   updateProductController
 );
 
-//fiter product || Post
+//@GET || Get all products
+router.get("/getproduct", getProductController);
+
+//@POST || Filter products
 router.post("/productfilter", productFilterController);
 
-// product count || get
+//@GET || Get total product count
 router.get("/productcount", productCountController);
 
-// product per page  || get
+//@GET || Get products with pagination
 router.get("/productlist/:page", productListController);
 
+//@GET || Get single product with similar products
 router.get("/product-and-similar/:slug", getSingleProductWithSimilar);
 
+//@GET || Get single product by slug
+router.get("/getproduct/:slug", getSingleProduct);
 
-router.get("/getproduct/:slug", getSingleProduct)
-
-//Payrment route || token
+//@GET || Get Braintree token
 router.get("/braintree/token", braintreeController);
 
-//payment route
-router.post("/braintree/payment",requireSignIn ,braintreePaymentController);
+//@GPOST || Process Braintree payment
+router.post("/braintree/payment", requireSignIn, braintreePaymentController);
 
 export default router;

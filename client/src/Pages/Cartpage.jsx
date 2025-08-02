@@ -76,7 +76,7 @@ const CartPage = () => {
   if (!isCartReady) {
     return (
       <Layout>
-        <div className="py-10 text-center">Loading cart...</div>
+        <LoadingSpinner loadingText="Loading cart..." />
       </Layout>
     );
   }

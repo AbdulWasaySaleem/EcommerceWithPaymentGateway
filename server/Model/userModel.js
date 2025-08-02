@@ -30,6 +30,10 @@ const userSchema = new mongoose.Schema({
   role:{
     type: Number,
     default: 0 // false
+  },
+  isDemoAdmin:{
+    type: Boolean,
+    default: false // false for regular users, true for demo admin
   }
 
 },{timestamps: true});

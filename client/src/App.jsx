@@ -37,10 +37,7 @@ function App() {
     <>
       <ScrollToTop />
       <Suspense fallback={<LoadingSpinner />}>
-        <ToastContainer
-          position="bottom-right"
-          pauseOnHover
-        />
+        <ToastContainer pauseOnHover />
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="product/:slug" element={<ProductDetails />} />
